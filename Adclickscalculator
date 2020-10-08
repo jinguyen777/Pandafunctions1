@@ -1,0 +1,16 @@
+
+import codecademylib
+import pandas as pd
+
+ad_clicks = pd.read_csv('ad_clicks.csv')
+
+print(ad_clicks.head(3))
+
+most_views=ad_clicks.groupby('utm_source').user_id.count().reset_index()
+print(most_views)
+#special code check - add a column 
+ad_clicks['ad_click_timestamp']=ad_clicks.ad_click_timestamp.notnull()
+print(ad_clicks.head(2))
+
+clicks_by_source=ad_clicks.groupby(['utm_source'])['user_id'].count().reset_index()
+print(clicks_by_source)
