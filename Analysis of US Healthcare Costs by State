@@ -1,0 +1,28 @@
+
+import pandas as pd
+from matplotlib import pyplot as plt
+
+healthcare = pd.read_csv("healthcare.csv")
+#print(healthcare.head())
+#print(healthcare["DRG Definition"].unique())
+
+chest_pain=healthcare[healthcare['DRG Definition']=='313 - CHEST PAIN']
+alabama_chest_pain=chest_pain[chest_pain['Provider State']=='AL']
+costs = alabama_chest_pain[' Average Covered Charges '].values
+
+print(alabama_chest_pain.head())
+
+#"healthcare" is the dataset --> 'DRG Definition' is a column in the dataset --> we created the 'chest_pain' Dataframe that pulled '313-Chest Pain' codes from DRG Definition 
+states=chest_pain["Provider State"].unique()
+datasets=[]
+
+#this for loop creates a database called "state" and appends the state in database "chest_pain" to the database "datasets" if it matches the value of 'Provider State' in database "states" and provides the value of ""Average Covered Charges"
+
+for state in states:
+  datasets.append(chest_pain[chest_pain['Provider State']==state][' Average Covered Charges '].values)
+#chest_pain= DataFrame (subset of 'healthcare' DataFrame)
+
+plt.figure(figsize=(20,6))
+plt.boxplot(datasets, labels=states)
+plt.show()
+print(datasets[0:2])
