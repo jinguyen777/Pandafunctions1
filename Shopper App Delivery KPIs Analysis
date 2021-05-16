@@ -1,0 +1,90 @@
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = pd.read_csv("Case Study Data Set 1.csv")
+print(data["REGION_ID"].unique())
+print(data["NUM_FINALIZED_DELIVERIES"].unique())
+unique_regions=data["REGION_ID"].describe()
+#unique_num_deliveries=data["NUM_FINALIZED_DELIVERIES"].describe()
+drivers=data[data['FUFILLMENT_TYPE']== 'Driver']
+walkers=data[data['FUFILLMENT_TYPE']== 'Walker']
+
+#print(unique_regions)
+#print(unique_num_deliveries)
+
+#print(drivers.describe())
+print(walkers.describe())
+
+drivers_batch_ids=drivers['BATCH_ID']
+walkers_batch_ids=walkers['BATCH_ID']
+print(drivers_batch_ids.value_counts())
+print(walkers_batch_ids.value_counts())
+
+duplicated_info=data.duplicated()
+#print(duplicated_info.head())
+#print(duplicated_info.describe())
+
+#data["total_pay"]=data[" TIME_PAY  "]+data[" MILEAGE_PAY "]+data[" TIP "] 
+#print(data.head())
+#total_pay_mean=data["total_pay"].mean()
+#print(total_pay_mean)
+
+in_store_time_driver=data.loc[data['FUFILLMENT_TYPE']=='Driver']['IN_STORE_TIME_MINUTES']
+in_store_time_walker=data.loc[data['FUFILLMENT_TYPE']=='Walker']['IN_STORE_TIME_MINUTES']
+plt.hist(in_store_time_driver, bins=300, edgecolor='blue')
+plt.title('Driver In Store Time (Range including outliers)')
+plt.ylabel('Count')
+plt.xlabel('In-Store Time (Minutes)')
+plt.show()
+
+#plt.hist(in_store_time_walker, bins = 10, edgecolor='black')
+#plt.title('Walker In Store Time (Range Including Outliers)')
+#plt.ylabel('Count')
+#plt.xlabel('In-Store Time (Minutes)')
+#plt.show()
+
+num_units_driver=data.loc[data['FUFILLMENT_TYPE']=='Driver']['UNITS']
+num_units_walker=data.loc[data['FUFILLMENT_TYPE']=='Walker']['UNITS']
+#plt.hist(num_units_driver, range = (0, 650), bins = 200, edgecolor='blue')
+#plt.title('Driver # Units in Batch (Range Excluding Outliers)')
+#plt.ylabel('Count')
+#plt.xlabel('# Units')
+#plt.show()
+
+#plt.hist(num_units_walker, bins = 10, edgecolor='blue')
+#plt.title('Walker # Units in Batch (Range Including Outliers)')
+#plt.ylabel('Count')
+#plt.xlabel('# Units')
+#plt.show()
+
+del_distance_driver=data.loc[data['FUFILLMENT_TYPE']=='Driver']['DELIVERY_DISTANCE']
+del_distance_walker=data.loc[data['FUFILLMENT_TYPE']=='Walker']['DELIVERY_DISTANCE']
+#plt.hist(del_distance_driver, range = (0, 35), bins = 10, edgecolor='blue')
+#plt.title('Driver Delivery Distance in Batch (Range Excluding Outliers)')
+#plt.ylabel('Count')
+#plt.xlabel('Distance')
+#plt.show()
+
+#plt.hist(del_distance_walker, bins = 10, edgecolor='blue')
+#plt.title('Walker Delivery Distance in Batch (Range Including Outliers)')
+#plt.ylabel('Count')
+#plt.xlabel('Distance')
+#plt.show()
+
+#tip_percentage_driver=data.loc[data['FUFILLMENT_TYPE']=='Driver']['TIP_OVER_TOTALPAY']
+#tip_percentage_walker=data.loc[data['FUFILLMENT_TYPE']=='Walker']['TIP_OVER_TOTALPAY']
+#plt.hist(tip_percentage_driver, range = (0, 1), bins = 50, edgecolor='blue')
+#plt.title('Driver Tip Percentage in Batch (Range Excluding Outliers)')
+#plt.ylabel('Count')
+#plt.xlabel('Tip As Percentage of Order')
+#plt.show()
+
+
+print("done")
+print(data.head())
+
+
+
+
