@@ -1,0 +1,28 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+major_data = pd.read_csv("major_data.csv")
+print(major_data.head())
+department_data = pd.read_csv("department_data.csv")
+print(department_data.head())
+
+pie_wedges_major = major_data["proportion"]
+pie_labels_major = major_data["major"]
+
+pie_wedges_department = department_data["proportion"]
+pie_labels_department = department_data["department"]
+
+plt.subplot(2,1,1)
+plt.pie(pie_wedges_major, labels = pie_labels_major)
+plt.axis('Equal')
+plt.title("Too Many Slices")
+plt.tight_layout()
+
+plt.subplot(2,1,2)
+plt.pie(pie_wedges_department, labels=pie_labels_department)
+plt.axis('Equal')
+plt.title("Good Number of Slices")
+plt.tight_layout()
+
+plt.show()
