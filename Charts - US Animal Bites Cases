@@ -1,0 +1,37 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import codecademylib3
+
+df = pd.read_csv("Health_AnimalBites.csv")
+print(df.head())
+Animal_Species=df['SpeciesIDDesc'].value_counts(dropna=True, normalize=True).reset_index()
+Animal_Species.columns=['Animal Species', 'Proportion_anim']
+print(Animal_Species)
+
+Animal_Gender=df['GenderIDDesc'].value_counts(dropna=True, normalize=True).reset_index()
+Animal_Gender.columns=['Gender', 'Proportion_gen']
+print(Animal_Gender)
+
+Label_Animal_Species=Animal_Species["Animal Species"]
+Proportion_Animal_Species=Animal_Species["Proportion_anim"]
+Label_Animal_Gender=Animal_Gender["Gender"]
+Proportion_Animal_Gender=Animal_Gender["Proportion_gen"]
+
+plt.subplot(3,1,1)
+sns.countplot(df["SpeciesIDDesc"])
+plt.title("Animal Species")
+plt.tight_layout()
+
+plt.subplot(3,1,2)
+sns.countplot(df["WhereBittenIDDesc"])
+plt.title("Where Bitten")
+plt.tight_layout()
+
+plt.subplot(3,1,3)
+plt.pie(Proportion_Animal_Gender, labels=Label_Animal_Gender)
+plt.axis('Equal')
+plt.title("Animal Gender")
+plt.tight_layout()
+
+plt.show()
