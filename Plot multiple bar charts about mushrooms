@@ -1,0 +1,20 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+import codecademylib3
+
+# loading in the data
+df = pd.read_csv("mushroom_data.csv")
+#print(df.head())
+
+# list of all column headers into a variable 'columns'
+columns = df.columns.tolist()
+#Bar charting all of the columns in the dataframe
+print(df.dtypes)
+for i in columns:
+  sns.countplot(df[i], order=df[i].value_counts(ascending=False).index)
+  plt.xticks(rotation=30, fontsize=10)
+  plt.xlabel(i, fontsize=12)
+  plt.title(i)
+  plt.show()
+  plt.clf()
