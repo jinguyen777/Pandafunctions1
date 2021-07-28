@@ -1,1 +1,42 @@
 
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt 
+import seaborn as sns
+import codecademylib3
+from scipy.stats import pearsonr
+np.set_printoptions(suppress=True, precision = 1) 
+
+penguins = pd.read_csv('penguins.csv')
+
+print(penguins.head(100))
+#bodymass_to_flipperlength=plt.scatter(x=penguins.body_mass_g, y=penguins.flipper_length_mm)
+#plt.xlabel('body mass in grams')
+#plt.ylabel('flipper length mm')
+#plt.show()
+correlation_mass_to_flipperL, p=pearsonr(penguins.body_mass_g, penguins.flipper_length_mm)
+print('correlation for mass to flippers is ', correlation_mass_to_flipperL)
+
+#bodymass_to_billlength=plt.scatter(x=penguins.body_mass_g[penguins.sex=="male"], y=penguins.bill_length_mm[penguins.sex=="male"])
+#plt.xlabel('body mass in grams')
+#plt.ylabel('bill length in mm')
+#plt.show()
+correlation_mass_to_billM, p=pearsonr(penguins.body_mass_g[penguins.sex=="male"], penguins.bill_length_mm[penguins.sex=="male"])
+print('correlation for mass to Male Bill Length is', correlation_mass_to_billM)
+
+bodymass_to_billlengthAD=plt.scatter(x=penguins.body_mass_g[penguins.species=="Adelie"], y=penguins.bill_length_mm[penguins.species=="Adelie"], c='blue')
+
+bodymass_to_billlengthGE=plt.scatter(x=penguins.body_mass_g[penguins.species=="Gentoo"], y=penguins.bill_length_mm[penguins.species=="Gentoo"], c='red')
+
+bodymass_to_billlengthCH=plt.scatter(x=penguins.body_mass_g[penguins.species=="Chinstrap"], y=penguins.bill_length_mm[penguins.species=="Chinstrap"], c='green')
+plt.legend((bodymass_to_billlengthAD, bodymass_to_billlengthGE, bodymass_to_billlengthCH),
+           ('Adelie', 'Gentoo', 'Chinstrap'),
+           scatterpoints=1,
+           loc='lower right',
+           ncol=3,
+           fontsize=9)
+plt.xlabel('body mass in grams')
+plt.ylabel('bill length in mm')
+plt.title('Mass and Bill Length by Penguin Species')
+plt.show()
