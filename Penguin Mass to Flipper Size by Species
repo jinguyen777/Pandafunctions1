@@ -1,3 +1,5 @@
+#**Creating overlapping scatterplots to compare data in a database divided into 3 subgroups in a single
+column of that database, and creating a special legend to differentiate those subgroups
 
 
 import numpy as np
