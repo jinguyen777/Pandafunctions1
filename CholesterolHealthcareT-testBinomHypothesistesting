@@ -1,0 +1,61 @@
+# import libraries
+import pandas as pd
+import numpy as np
+from scipy.stats import ttest_1samp
+from scipy.stats import binom_test
+
+# load data
+heart = pd.read_csv('heart_disease.csv')
+yes_hd = heart[heart.heart_disease == 'presence']
+no_hd = heart[heart.heart_disease == 'absence']
+
+print(heart.head(1))
+
+chol_hd=yes_hd.chol
+
+print("HIGH CHOLESTEROL STATS BELOW:")
+print("Min: ",np.min(chol_hd))
+print("Average: ",np.average(chol_hd))
+print("Median: ",np.median(chol_hd))
+print("Max: ",np.max(chol_hd), "\n")
+print("NUMBER OF HEART DISEASE SAMPLES: ",len(chol_hd))
+greater_than_240_hd=list(filter(lambda x: x>240, chol_hd))
+print("Number of samples greater than 240 is: ", len(greater_than_240_hd))
+decimal_value_greater_240=len(greater_than_240_hd)/len(chol_hd)
+print("Fraction greater than 240 is: ",decimal_value_greater_240)
+
+#Null Hypothesis:  The average cholesterol of people WITH heart disease is 240.  Alternative Hypothesis:  The average cholesterol of people WITH heart disease is GREATER THAN 240.  
+#Doing a 1-sample t-test because you are working with 1 sample to come to your conclusion and ttest_1samp() function tests 2-sidedly if your sample is significantly different than the average that you input.  NOTE:  YOU set the significance threshold --> if the p-value is less than 0.X, than your null hypothesis is false (or 'not true')
+tstat, pval=ttest_1samp(chol_hd, 240)
+print("The p-value is: ",pval/2, "\n\n") #CAN be greater than 240 based on the p-value being less than your selected significance threshold of 0.05 - Alternative hypothesis is true
+
+chol_nohd=no_hd.chol
+print("LOW CHOLESTEROL STATS BELOW:")
+print("Min: ",np.min(chol_nohd))
+print("Average: ",np.average(chol_nohd))
+print("Median: ",np.median(chol_nohd))
+print("Max: ",np.max(chol_nohd), "\n")
+
+print("NUMBER OF NO HEART DISEASE SAMPLES: ",len(chol_nohd))
+greater_than_240_nohd=list(filter(lambda x:x>240, chol_nohd))
+print("Number of samples greater than 240 is: ",len(greater_than_240_nohd))
+print("Fraction greater than 240 is: ",len(greater_than_240_nohd)/len(chol_nohd))
+
+#Null Hypothesis:  The average cholesterol of people WITHOUT heart disease is 240.  Alternative Hypothesis:  The average cholesterol of people WITH heart disease is GREATER THAN 240.  
+#Doing a 1-sample t-test because you are working with 1 sample to come to your conclusion and ttest_1samp() function tests 2-sidedly if your sample is significantly different than the average that you input.  NOTE:  YOU set the significance threshold --> if the p-value is less than 0.X, than your null hypothesis is false (or 'not true')
+tstat,pval=ttest_1samp(chol_nohd,240)
+print("The p-value is: ",pval/2, "\n\n") #MORE LIKELY to be 240 vs. GREATER THAN 240.  Therefore the null hypothesis is true based on your selected significance threshold of 0.05
+
+#The Fasting Blood Sugar column in Dataframe "heart" is simply a binomial variable where "1" means patients have HIGH fasting blood sugar, and where "0" means patients have a LOW fasting blood sugar.  When doing an analysis on a binomial variable or dataset, you use the 'binom_test' function.  
+print("FASTING BLOOD SUGAR ANALYSIS BELOW:")
+num_patients=len(heart)
+print(num_patients)
+num_highfbs_patients=len(heart[heart.fbs==1])
+print("Number of high fbs patients: ",num_highfbs_patients)
+print("Proportion with high fbs: ",num_highfbs_patients/len(heart))
+
+one_sided_p_value=binom_test(45, 303, 0.08, alternative='greater')
+print(one_sided_p_value)
+
+
+
