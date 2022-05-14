@@ -1,0 +1,112 @@
+# import libraries
+import heartdiseaselib3
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt 
+import seaborn as sns
+from scipy.stats import ttest_ind
+from scipy.stats import f_oneway
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+from scipy.stats import chi2_contingency
+
+#This is a comprehensive analysis of heart disease patients sampled at the Cleveland Clinic Foundation, downloaded from the UCI Machine Learning Repository in 2022
+#The analysis reviews various patient characteristics to discover trends in patients diagnosed with heart disease, and those not diagnosed with heart disease.  
+#Variables included thalach (maximum heart rate achieved in exercise test), trestbps (resting blood pressure in mm Hg), cp (chest pain type), and age
+
+# load data
+heart = pd.read_csv('heart_disease.csv')
+
+
+print(heart.head(1))
+heart_presence=heart[heart['heart_disease']=='presence']
+heart_absence=heart[heart['heart_disease']=='absence']
+plt.boxplot([heart_presence.chol, heart_presence.trestbps, heart_presence.thalach], labels=["chol", "testbps", "thalach"])
+plt.title("Heart Disease Presence BPS Distribution")
+#plt.show()
+
+plt.clf() #clear previous plot so it doesn't overlap
+plt.boxplot([heart_absence.chol, heart_absence.trestbps, heart_absence.thalach], labels=["chol", "testbps", "thalach"])
+plt.title("Heart Disease Multi-Variable Distribution")
+plt.show()
+
+thalach_hd=heart_presence.thalach
+thalach_no_hd=heart_absence.thalach
+diff_mean_thalach=thalach_hd.mean()-thalach_no_hd.mean()
+print("the mean diff between thalach HD and NOHD is: ", diff_mean_thalach)
+diff_median_thalach=thalach_hd.median()-thalach_no_hd.median()
+print("the median diff between thalach HD and NOHD is: ", diff_median_thalach)
+tstat, pval=ttest_ind(thalach_hd, thalach_no_hd)
+print(pval)
+
+plt.clf()
+plt.boxplot([heart_absence.age], labels=["age"])
+plt.title("No Heart Disease Age Disbribution")
+#plt.show()
+
+plt.clf()
+plt.boxplot([heart_presence.age], labels=["age"])
+plt.title("Heart Disease Age Disbribution")
+#plt.show()
+
+print(heart.cp.unique())
+#heart_presence=heart[heart['heart_disease']=='presence']
+pain_type_typicalangina=heart[heart['cp']=='typical angina']
+pain_type_asymptomatic=heart[heart['cp']=='asymptomatic']
+pain_type_nonanginal=heart[heart['cp']=='non-anginal pain']
+pain_type_atypicalangina=heart[heart['cp']=='atypical angina']
+plt.clf()
+plt.boxplot([pain_type_typicalangina.thalach, pain_type_asymptomatic.thalach, pain_type_nonanginal.thalach, pain_type_atypicalangina.thalach], labels=["typicalang", "asymptomatic", "nonanginal", "atypicalang"])
+plt.title("pain type and thalach")
+#plt.show()
+
+fstat, pval=f_oneway(pain_type_typicalangina.thalach, pain_type_asymptomatic.thalach, pain_type_nonanginal.thalach, pain_type_atypicalangina.thalach) #ANOVA test
+print(pval)
+
+tukey_matrix=pairwise_tukeyhsd(heart.thalach, heart.cp, 0.05)
+print(tukey_matrix)
+
+xtab=pd.crosstab(heart.cp, heart.heart_disease)
+print(xtab)
+
+chi2, pval, dof, expected = chi2_contingency(xtab)
+print(pval)
+
+xtab2=pd.crosstab(heart.sex, heart.heart_disease)
+chi2, pval, dof, expected = chi2_contingency(xtab2)
+print(pval)
+
+xtab_age=pd.crosstab(heart.age, heart.heart_disease)
+#print(xtab_age)
+chi2,pval, dof, expected = chi2_contingency(xtab_age)
+print(pval)
+
+xtab_sex=pd.crosstab(heart.sex, heart.heart_disease)
+print(xtab_sex)
+chi2, pval, dof, expected = chi2_contingency(xtab_sex)
+print(pval)
+
+#age vs. resting blood pressure
+plt.clf()
+plt.plot(heart.age, heart.thalach, "o")
+plt.title("Age vs. max heart rate - ALL")
+#plt.show()
+
+#pain_type_nonanginal=heart[heart['cp']=='non-anginal pain']
+
+heart_nohd=heart[heart['heart_disease']=='presence']
+heart_hd=heart[heart['heart_disease']=='absence']
+
+plt.clf()
+plt.plot(heart_hd.age, heart_hd.thalach, "o")
+plt.title("Age vs. max heart rate = Heart Disease Sample")
+plt.xlabel('Age')
+plt.ylabel('max heart rate')
+plt.show()
+
+plt.clf()
+plt.plot(heart_nohd.age, heart_nohd.thalach, "o")
+plt.title("Age vs. max heart rate = No Heart Disease Sample")
+plt.xlabel('Age')
+plt.ylabel('max heart rate')
+plt.show()
+
