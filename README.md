@@ -1,2 +1,2 @@
 # Pandafunctions1
-Panda functions
+Python Data Science Projects
